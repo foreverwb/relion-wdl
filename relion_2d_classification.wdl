@@ -1,13 +1,15 @@
 version 1.0
 
 workflow CryoEM2DAnalysis {
-  File Particles
-  Int pool
+  input{
+    File Particles
+    Int pool
+  }
 
   call Relion_2D_Classification {
     input:
-      Particles = Particles
-      pool = pool
+      Particles = Particles,
+      pool = pool,
   }
 }
 
@@ -62,14 +64,14 @@ task Relion_2D_Classification {
   }
 
   output {
-    // 平均值
+    # 平均值
     File classAverages = 'class_averages.mrc'
-    // 运动校正
+    # 运动校正
     File motionCorrections = 'motion_corrections.mrc'
   }
 
   runtime {
-    docker: docker_image
+    docker: "${docker_image}"
     gpuType: 'Tesla-T4'
     gpuCount: 2
     memory: '256G'
